@@ -15,21 +15,24 @@ export async function handler(event, context) {
     try {
         const response = await axios.get(`https://${KLARNA_API_KEY}:${KLARNA_PASSWORD}@${KLARNA_SHOP_URL}/admin/api/2020-07/customers/${id}.json`, {
             headers: {
-                Accept: "application/json"
+                "Accept": "application/json",
+                "Content-Type": "application/json"
             }
         })
         const data = response.data
         return {
             statusCode: 200,
             body: JSON.stringify({
-                data
+                shopify: data
             })
         }
     } catch (err) {
         console.log(err) // output to netlify function log
         return {
             statusCode: 500,
-            body: JSON.stringify(err) // Could be a custom message or object i.e. JSON.stringify(err)
+            body: JSON.stringify({
+                shopify: err.message
+            }) // Could be a custom message or object i.e. JSON.stringify(err)
         }
     }
 }
