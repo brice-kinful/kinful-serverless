@@ -1,27 +1,81 @@
+// example of async handler using async-await
+// https://github.com/netlify/netlify-lambda/issues/43#issuecomment-444618311
 require('dotenv').config();
-const axios = require('axios');
+
+import axios from "axios"
 const {
     KLARNA_API_KEY,
     KLARNA_PASSWORD,
     KLARNA_SHOP_URL
 } = process.env;
+export async function handler(event, context) {
+    const {
+        id
+    } = event.queryStringParameters;
+    try {
+        const response = await axios.get(`https://${KLARNA_API_KEY}:${KLARNA_PASSWORD}@${KLARNA_SHOP_URL}/admin/api/2020-07/customers/${id}.json`, {
+            headers: {
+                Accept: "application/json"
+            }
+        })
+        const data = response.data
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                data
+            })
+        }
+    } catch (err) {
+        console.log(err) // output to netlify function log
+        return {
+            statusCode: 500,
+            body: JSON.stringify(err) // Could be a custom message or object i.e. JSON.stringify(err)
+        }
+    }
+}
 
-//https://community.netlify.com/t/how-do-i-call-a-netlify-function-through-the-client-side-using-a-simple-function-invocation-like-netlifyfuction/1157/2
 
 
-exports.handler = function (event, context, callback) {
+
+// example of async handler using async-await
+// https://github.com/netlify/netlify-lambda/issues/43#issuecomment-444618311
+require('dotenv').config();
+
+import axios from "axios"
+const {
+    KLARNA_API_KEY,
+    KLARNA_PASSWORD,
+    KLARNA_SHOP_URL
+} = process.env;
+export async function handler(event, context) {
     const {
         id,
         note
     } = event.queryStringParameters;
-    const url = `https://${KLARNA_API_KEY}:${KLARNA_PASSWORD}@${KLARNA_SHOP_URL}/admin/api/2020-07/customers/${id}.json`;
-
-    axios.put(url, note)
-        .then(json => {
-            callback(null, {
-                statusCode: 200,
-                body: JSON.stringify(json.data)
-            });
+    try {
+        const shopifyCustomer = {
+            customer: {
+                id: id,
+                note: note
+            }
+        }
+        const response = await axios.put(`https://${KLARNA_API_KEY}:${KLARNA_PASSWORD}@${KLARNA_SHOP_URL}/admin/api/2020-07/customers/${id}.json`, shopifyCustomer, {
+            headers: {
+                Accept: "application/json"
+            }
         })
-        .catch(ex => callback(ex));
+        const data = response.data
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                data
+            })
+        }
+    } catch (err) {
+        console.log(err) // output to netlify function log
+        return {
+            statusCode: 500,
+            body: JSON.stringify(err) // Could be a custom message or object i.e. JSON.stringify(err)
+        }
+    }
 }
