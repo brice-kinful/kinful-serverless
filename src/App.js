@@ -17,28 +17,16 @@ class LambdaDemo extends Component {
       .then((json) => this.setState({ loading: false, msg: json.msg }));
   };
 
-  getCustomer = (e) => {
-    e.preventDefault();
-
-    this.setState({ loading: true });
-    fetch("/.netlify/functions/shopify-get-klarna-customer?id=3691610275884")
-      .then((response) => response.json())
-      .then((json) => this.setState({ loading: false, msg: json.customer }));
-  };
-
   render() {
     const { loading, msg } = this.state;
 
     return (
       <p>
-        {/* <button onClick={this.handleClick("hello")}>
+        <button onClick={this.handleClick("hello")}>
           {loading ? "Loading..." : "Call Lambda"}
         </button>
         <button onClick={this.handleClick("async-dadjoke")}>
           {loading ? "Loading..." : "Call Async Lambda"}
-        </button> */}
-        <button onClick={this.getCustomer}>
-          {loading ? "Loading..." : "Get Shopify (Klarna) Customer"}
         </button>
         <br />
         <span>{msg}</span>
