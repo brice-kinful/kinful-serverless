@@ -8,16 +8,16 @@ class LambdaDemo extends Component {
     this.state = { loading: false, msg: null };
   }
 
-  // handleClick = (api) => (e) => {
-  //   e.preventDefault();
+  handleClick = (api) => (e) => {
+    e.preventDefault();
 
-  //   this.setState({ loading: true });
-  //   fetch("/.netlify/functions/" + api)
-  //     .then((response) => response.json())
-  //     .then((json) => this.setState({ loading: false, msg: json.msg }));
-  // };
+    this.setState({ loading: true });
+    fetch("/.netlify/functions/" + api)
+      .then((response) => response.json())
+      .then((json) => this.setState({ loading: false, msg: json.msg }));
+  };
 
-  getCustomer = () => {
+  getCustomer = (e) => {
     e.preventDefault();
 
     this.setState({ loading: true });
@@ -38,7 +38,7 @@ class LambdaDemo extends Component {
           {loading ? "Loading..." : "Call Async Lambda"}
         </button> */}
         <button onClick={this.getCustomer}>
-          {loading ? "Loading..." : "Get Klarna (Brice) Customer"}
+          {loading ? "Loading..." : "Get Shopify (Klarna) Customer"}
         </button>
         <br />
         <span>{msg}</span>
